@@ -1164,16 +1164,36 @@ https://www.romhacking.net/hacks/4180/.</td></tr>
  <tr class="line"><td><input class="sel" type="checkbox"><input type="text" class="bin" value="Zoids Mokushiroku [RUS].nes" disabled hidden><input type="text" class="hex" value="eg" disabled hidden><label class="loc" value=1></td><td><label class="title" value=1038>Zoids Mokushiroku</label></td><td><font color="green">rus</font></td><td><label class="size" value=256>256</label><input class="sv" type="checkbox" hidden></td><td>MMC3</td><td></td></tr>
  <tr class="line"><td><input class="sel" type="checkbox"><input type="text" class="bin" value="Zombie Nation (U) [!] [ENG] [CRACK].nes" disabled hidden><input type="text" class="hex" value="fg" disabled hidden><label class="loc" value=0></td><td><label class="title" value=1039>Zombie Nation*</label></td><td><font color="blue">eng</font></td><td><label class="size" value=256>256</label><input class="sv" type="checkbox" hidden></td><td>MMC3</td><td>30 Жизней.</td></tr>
  <tr class="line"><td><input class="sel" type="checkbox"><input type="text" class="bin" value="Zombie Nation (U) [!] [ENG].nes" disabled hidden><input type="text" class="hex" value="gg" disabled hidden><label class="loc" value=0></td><td><label class="title" value=1040>Zombie Nation</label></td><td><font color="blue">eng</font></td><td><label class="size" value=256>256</label><input class="sv" type="checkbox" hidden></td><td>MMC3</td><td></td></tr>
- <tr class="line"><td><input class="sel" type="checkbox"><input type="text" class="bin" value="Zooming Secretary [ENG].nes" disabled hidden><input type="text" class="hex" value="hg" disabled hidden><label class="loc" value=0></td><td><label class="title" value=1041>Zooming Secretary</label></td><td><font color="blue">eng</font></td><td><label class="size" value=40>40</label><input class="sv" type="checkbox" hidden></td><td>NROM</td><td></td></tr>
-</table>
+ 
+ <tr class="line"><td>
+ <input class="sel" type="checkbox">
+ <input type="text" class="bin" value="Zooming Secretary [ENG].nes" disabled hidden>
+ <input type="text" class="hex" value="hg" disabled hidden>
+ <label class="loc" value=0></td><td>
+ <label class="title" value=1041>Zooming Secretary</label></td><td>
+ <font color="blue">eng</font></td><td>
+ <label class="size" value=40>40</label>
+ <input class="sv" type="checkbox" hidden>
+ </td><td>NROM</td><td></td></tr>
+
+ </table>
 </div>
 <div class="info">
-	<input value="Сбросить выделение" onclick="ResetSelect()" type="button">
+	<input value="Сбросить выбор" onclick="ResetSelect()" type="button">
 	<input value="Выделить всё" onclick="SelectAll()" type="button">
-	<input value="Выделить Rus" onclick="SelectRus()" type="button">
-	<input value="Выделить Eng" onclick="SelectEng()" type="button">
-	<input value="Выделить Jap" onclick="SelectJap()" type="button">
-	<input value="Выделить Crack" onclick="SelectCrack()" type="button">
+	<input value="Выделить Rus" id = "rus" onclick="SelectRus()" type="checkbox">rus</input>
+	<input value="Выделить Eng" id = "eng" onclick="SelectEng()" type="checkbox">eng</input>
+	<input value="Выделить Jap" id = "jap" onclick="SelectJap()" type="checkbox">jap</input>
+	<input value="Выделить Crack" id = "crk" onclick="SelectCrack()" type="checkbox">crack</input>
+	<input value="Спрятать игры неотмеченных категорий" onclick="HideOthers()" type="button">
+	<br>
+	<input id="search" name="q" label="Фильтр" value="512">
+    <button onclick="FilterSize()">Размер</button>
+	
+<!--	<input id="searchMap" name="q" label="Фильтр" value="MMC3">
+        <button onclick="FilterMap()">Маппер</button>
+-->	
+	
 	<input value="Посмотреть список ромов" onclick="BuildList()" type="button"><br>
 	<div id="total">Выбрано: 0</div>
 	<div id="counter">Размер: 0</div>
@@ -1226,8 +1246,26 @@ https://www.romhacking.net/hacks/4180/.</td></tr>
 	    for (var i = 0; i < elsSelected.length; i++)
 		{
 			var itemCheckbox = elsSelected[i];
+			elsLines[i].removeAttribute("hidden");
+			//elsLines[i].setAttribute("hidden","false");
 			itemCheckbox.checked = false;
 			elsLines[i].style.backgroundColor = "#FFFFFF";
+			
+			
+			var checkEng=document.getElementById('eng');
+			checkEng.checked = false;
+			
+			var checkJap=document.getElementById('jap');
+			checkJap.checked = false;
+			
+			var checkRus=document.getElementById('rus');
+			checkRus.checked = false;
+			
+			var checkCrk=document.getElementById('crk');
+			checkCrk.checked = false;
+			
+			
+			
         }
 		updateSelected();
 	}
@@ -1236,9 +1274,23 @@ https://www.romhacking.net/hacks/4180/.</td></tr>
 	{
 	    for (var i = 0; i < elsSelected.length; i++)
 		{
+		
 			var itemCheckbox = elsSelected[i];
 			itemCheckbox.checked = true;
 			elsLines[i].style.backgroundColor = "#FFFFFF";
+			
+			var checkEng=document.getElementById('eng');
+			checkEng.checked = true;
+			
+			var checkJap=document.getElementById('jap');
+			checkJap.checked = true;
+			
+			var checkRus=document.getElementById('rus');
+			checkRus.checked = true;
+			
+			var checkCrk=document.getElementById('crk');
+			checkCrk.checked = true;
+			
         }
 		updateSelected();
 	}
@@ -1247,6 +1299,48 @@ https://www.romhacking.net/hacks/4180/.</td></tr>
 // blue">eng</font>
 // <font color="green">rus</font>
 // <font color="red">jap	
+
+function FilterSize()
+	{
+	    for (var i = 1; i < elsSelected.length; i++)
+	    {
+		var j = i-1;
+		var elsFilter = document.querySelectorAll('.content label[class="size"]');
+        var titl = elsFilter[i].getAttribute("value");
+       	var text = document.getElementById("search").value;
+		if (text==titl)
+			
+			{
+				var itemCheckbox = elsSelected[i];
+				itemCheckbox.checked = true;
+				elsLines[j].style.backgroundColor = "#FFFFFF";
+			}
+		}	
+		updateSelected();
+	}
+	
+function FilterMap()
+	{
+	    for (var i = 1; i < elsSelected.length; i++)
+	    {
+
+		var j = i-1;
+/////////////////////
+		var elsFilter = document.querySelectorAll('.content label[class="size"]');
+        var titl = elsFilter[i].getAttribute("value");
+ //////////////////////     
+	    var text = document.getElementById("searchMap").value;
+		if (text==titl)
+			
+			{
+				var itemCheckbox = elsSelected[i];
+				itemCheckbox.checked = true;
+				elsLines[j].style.backgroundColor = "#FFFFFF";
+			}
+		}	
+		updateSelected();
+	}
+	
 
 	function SelectEng()
 	{
@@ -1258,9 +1352,21 @@ https://www.romhacking.net/hacks/4180/.</td></tr>
 	
 		if (color == "blue")
 			{
+			
+			
 		    var itemCheckbox = elsSelected[j];
-			itemCheckbox.checked = true;
-			elsLines[j].style.backgroundColor = "#FFFFFF";
+			var checkEng=document.getElementById('eng');
+			if (checkEng.checked == true)
+				{
+				itemCheckbox.checked = true;
+				elsLines[j].style.backgroundColor = "#FFFFFF";
+				}
+				else 
+				if (checkEng.checked == false)
+				{
+				itemCheckbox.checked = false;
+				}
+			
 			}
 		else
 			{	
@@ -1282,9 +1388,21 @@ https://www.romhacking.net/hacks/4180/.</td></tr>
 	
 		if (color == "green")
 			{
+			
+			
 		    var itemCheckbox = elsSelected[j];
-			itemCheckbox.checked = true;
-			elsLines[j].style.backgroundColor = "#FFFFFF";
+			var checkRus=document.getElementById('rus');
+			if (checkRus.checked == true)
+				{
+				itemCheckbox.checked = true;
+				elsLines[j].style.backgroundColor = "#FFFFFF";
+				}
+				else 
+				if (checkRus.checked == false)
+				{
+				itemCheckbox.checked = false;
+				}
+			
 			}
 		else
 			{	
@@ -1308,8 +1426,17 @@ https://www.romhacking.net/hacks/4180/.</td></tr>
 		if (color == "red")
 			{
 		    var itemCheckbox = elsSelected[j];
-			itemCheckbox.checked = true;
-			elsLines[j].style.backgroundColor = "#FFFFFF";
+			var checkJap=document.getElementById('jap');
+			if (checkJap.checked == true)
+				{
+				itemCheckbox.checked = true;
+				elsLines[j].style.backgroundColor = "#FFFFFF";
+				}
+				else 
+				if (checkJap.checked == false)
+				{
+				itemCheckbox.checked = false;
+				}
 			}
 		else
 			{	
@@ -1332,9 +1459,20 @@ https://www.romhacking.net/hacks/4180/.</td></tr>
     if (titl.includes("CRACK"))
 
 			{
+			
 		    var itemCheckbox = elsSelected[i];
-			itemCheckbox.checked = true;
-			elsLines[i].style.backgroundColor = "#FFFFFF";
+			var checkCrk=document.getElementById('crk');
+			if (checkCrk.checked == true)
+				{
+				itemCheckbox.checked = true;
+				elsLines[i].style.backgroundColor = "#FFFFFF";
+				}
+				else 
+				if (checkCrk.checked == false)
+				{
+				itemCheckbox.checked = false;
+				}
+			
 			}
 		else
 			{	
@@ -1345,6 +1483,26 @@ https://www.romhacking.net/hacks/4180/.</td></tr>
 		updateSelected();
 	}
 	
+	
+		
+	function HideOthers()
+	{
+        for (var i = 0; i < elsSelected.length; i++)
+		{
+			var itemCheckbox = elsSelected[i];
+			if (itemCheckbox.checked == false)
+			{
+				elsLines[i].setAttribute("hidden","true");
+				elsLines[i].style.backgroundColor = "#FFFFFF";
+			} 
+			//else
+			{
+				// elsLines[i].removeAttribute("hidden");
+				
+			}
+        }
+		updateSelected();
+    }
 	
 	
 	
