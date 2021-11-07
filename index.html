@@ -29,6 +29,17 @@
 			text-align: left;
 			max-width:1200px;
         }
+		
+		
+		.overInfo {
+		    background-color: white;
+            padding: 5px;
+			position: fixed;
+			bottom: 0;
+			right: 0;
+		}
+		
+		
         .info {
             background-color: gainsboro;
             padding: 15px;
@@ -72,7 +83,7 @@
 Цена указана за картридж с корпусом и наклейкой<br>
 Оплата либо на карту Visa, либо наложенный платеж.</p>
 <p>Связаться со мной можно по  email <b></b></p>
-<p>Разработка не моя, а товарища из Украины, сотрудничаем по договору</p>
+
 </div>
 <table border="1" class="content">
 <tr><td></td><td style="min-width:400px">Название Игры</td><td>Язык</td><td>Размер(КБ)</td><td>Маппер</td><td>Коментарии</td></tr>
@@ -1178,7 +1189,11 @@ https://www.romhacking.net/hacks/4180/.</td></tr>
 
  </table>
 </div>
-<div class="info">
+
+<div class="overInfo" id="ingo2">
+<input value="Развернуть" onclick="InfoUnhide()" type="button"><br>
+
+<div class="info" id="ingo">
 	<input value="Сбросить выбор" onclick="ResetSelect()" type="button">
 	<input value="Выделить всё" onclick="SelectAll()" type="button">
 	<input value="Выделить Rus" id = "rus" onclick="SelectRus()" type="checkbox">rus</input>
@@ -1202,6 +1217,8 @@ https://www.romhacking.net/hacks/4180/.</td></tr>
 	<div id="save_count">Сохранений: 0</div>
 	<div>
 		<input type="checkbox" id="filterLoc">Без Локализации
+		<input value="Cвернуть блок" onclick="InfoHide()" type="button"><br>
+
 	</div>
 	<div id="build_area" hidden>
 		<div>
@@ -1211,10 +1228,20 @@ https://www.romhacking.net/hacks/4180/.</td></tr>
 			<input value="Скрыть" onclick="BuildHide()" type="button"><br>
 		</div>
 	</div>
+	
+
+	
+</div>
+
+
+
+
 </div>
 
 <div id="preview_id" class="preview" hidden>
 </div>
+
+
 
 <script>
 	var elSaveCount = document.querySelector('#save_count');
@@ -1235,11 +1262,24 @@ https://www.romhacking.net/hacks/4180/.</td></tr>
 	var elsLines = document.querySelectorAll('.content tr[class="line"]');
 	var elPreview = document.querySelector('#preview_id');
 	var elsFontBlue = document.querySelectorAll('.content font[color="blue"]');
-		var elsFontBlue = document.querySelectorAll('.content font[color="blue"]');
+	var elsFontBlue = document.querySelectorAll('.content font[color="blue"]');
+	var elInfo = document.getElementById("ingo");
 	
 	elFilterLoc.addEventListener('change', updateFilter);
 	
 	window.onload = onPageLoad;
+	
+	
+	function InfoHide()
+	{
+		elInfo.setAttribute("hidden","true");
+	}
+	
+		function InfoUnhide()
+	{
+		elInfo.removeAttribute("hidden");
+	}
+	
 	
 	function ResetSelect()
 	{
